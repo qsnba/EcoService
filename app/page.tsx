@@ -52,7 +52,7 @@ function ServicesSection() {
           </a>
         </div>
 
-        <div style={s.grid4}>
+        <div className="grid-responsive" style={s.grid4}>
           <a
             href="#services-commissioning"
             style={{ ...s.card, ...s.serviceCardDark }}
@@ -406,7 +406,7 @@ function CapabilitiesSection() {
           </div>
         </div>
 
-        <div style={{ ...s.grid4, gridTemplateColumns: "repeat(3, 1fr)" }}>
+        <div className="grid-responsive" style={{ ...s.grid4, gridTemplateColumns: "repeat(3, 1fr)" }}>
           {/* ✅ 锚点 1 */}
           <div id="cap-network" style={{ scrollMarginTop: 90 }} />
           <a href="#cap-network" style={s.card}>

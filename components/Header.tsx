@@ -99,6 +99,7 @@ export default function Header() {
   const menu: MenuItem[] = useMemo(() => buildMenu(lang), [lang]);
   const [open, setOpen] = useState<string | null>(null);
   const menuCloseTimer = React.useRef<number | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const cancelMenuClose = () => {
     if (menuCloseTimer.current) window.clearTimeout(menuCloseTimer.current);
@@ -153,7 +154,7 @@ export default function Header() {
             </a>
 
             {/* 主导航 */}
-            <nav
+            <nav className="desktop-nav"
               style={styles.nav}
               onMouseEnter={() => {
                 setNavHover(true);
@@ -224,8 +225,17 @@ export default function Header() {
 
             {/* 右侧：语言 + CTA */}
             <div style={styles.right}>
-              <div style={styles.right}>
+              <div style={styles.rightInner}>
                 {/* 语言下拉 */}
+                <button
+                  className="mobile-btn"
+                  type="button"
+                  style={styles.mobileBtn}
+                  onClick={() => setMobileOpen(v => !v)}
+                  aria-label="Open menu"
+                >
+                  ☰
+                </button>
                 <div
                   style={styles.langWrap}
                   onMouseEnter={openLang}
@@ -269,12 +279,93 @@ export default function Header() {
           </div>
         </div>
       </header>
+      {mobileOpen ? (
+        <div style={styles.mobilePanel}>
+          {menu.map((item) =>
+            item.type === "link" ? (
+              <a
+                key={item.label}
+                href={item.href}
+                style={styles.mobileLink}
+                onClick={() => setMobileOpen(false)}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <div key={item.label} style={styles.mobileGroup}>
+                <div style={styles.mobileGroupTitle}>{item.label}</div>
+                {item.columns
+                  .flatMap((c) => c.links)
+                  .map((l) => (
+                    <a
+                      key={`${l.href}-${l.label}`}
+                      href={l.href}
+                      style={styles.mobileSubLink}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {l.label}
+                    </a>
+                  ))}
+              </div>
+            )
+          )}
+        </div>
+      ) : null}
     </>
   );
 
 }
 
 const styles: { [k: string]: React.CSSProperties } = {
+
+  mobileBtn: {
+    display: "none",
+    border: "1px solid rgba(255,255,255,.35)",
+    background: "rgba(255,255,255,.12)",
+    color: "white",
+    borderRadius: 10,
+    padding: "8px 10px",
+    fontWeight: 900,
+    cursor: "pointer",
+  },
+
+  mobilePanel: {
+    position: "fixed",
+    top: 64,
+    left: 12,
+    right: 12,
+    zIndex: 80,
+    borderRadius: 16,
+    padding: 12,
+    background: "rgba(10,14,25,.92)",
+    border: "1px solid rgba(255,255,255,.12)",
+    backdropFilter: "blur(10px)",
+  },
+
+  mobileLink: {
+    display: "block",
+    padding: "12px 10px",
+    textDecoration: "none",
+    color: "white",
+    fontWeight: 800,
+    borderRadius: 12,
+  },
+
+  mobileGroup: { padding: "6px 0" },
+  mobileGroupTitle: { color: "rgba(255,255,255,.75)", fontWeight: 900, padding: "10px 10px 6px" },
+
+  mobileSubLink: {
+    display: "block",
+    padding: "10px 10px",
+    textDecoration: "none",
+    color: "rgba(255,255,255,.92)",
+    borderRadius: 12,
+    fontWeight: 700,
+    opacity: 0.95,
+  },
+
+  rightInner: { display: "flex", alignItems: "center", gap: 10 },
+
   container: { maxWidth: 1180, margin: "0 auto", padding: "0 20px" },
 
   header: {
