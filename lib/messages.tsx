@@ -195,6 +195,8 @@ export const messages = {
         capabilities: "能力",
         projects: "项目案例",
         contact: "联系我们",
+        company: "公司简介",
+        partners: "合作品牌",
       },
 
       news: [
@@ -425,6 +427,8 @@ export const messages = {
         capabilities: "Capabilities",
         projects: "Projects",
         contact: "Contact",
+        company: "Company Profile",
+        partners: "Partners",
       },
 
       news: [

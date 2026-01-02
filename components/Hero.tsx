@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import CyberEnergyBackground from "../components/CyberEnergyBackground";
 import { useI18n } from "../lib/i18n";
 
 export default function Hero() {

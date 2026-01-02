@@ -68,3 +68,92 @@ video {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+
+/* ===== Grid responsive (mobile first) ===== */
+.grid-responsive {
+  display: grid;
+  gap: 14px;
+}
+
+/* 手机：一列 */
+@media (max-width: 900px) {
+  .grid-responsive {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 平板：两列 */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ===== Improve readability on mobile ===== */
+@media (max-width: 900px) {
+
+  .dark-section h2,
+  .dark-section p,
+  .dark-section a,
+  .dark-section div {
+    color: rgba(255, 255, 255, .92);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+  }
+
+  /* 卡片在深色背景上也改成深色卡片，文字更清楚 */
+  .dark-card {
+    background: rgba(10, 14, 25, .75) !important;
+    border: 1px solid rgba(255, 255, 255, .14) !important;
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* ===== Footer grid: keep desktop as-is, only change on small screens ===== */
+
+/* 平板：强制 2 列（只在 <=980px 生效） */
+@media (max-width: 1200px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* 手机：强制 1 列（只在 <=640px 生效） */
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* improve readability in footer area */
+#about {
+  color: rgba(255, 255, 255, .92);
+}
+
+#about a {
+  color: rgba(255, 255, 255, .88);
+}
+
+#about p,
+#about li,
+#about input {
+  color: rgba(255, 255, 255, .86);
+}
+
+/* Make footer text readable on dark backgrounds */
+#about {
+  color: rgba(255, 255, 255, .92);
+}
+
+#about a {
+  color: rgba(255, 255, 255, .9);
+}
+
+#about a:hover {
+  opacity: 0.9;
+}
+
+/* inputs/buttons on mobile */
+#about input {
+  font-size: 16px;
+  /* 防止 iPhone 自动放大导致布局乱 */
+}

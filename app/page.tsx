@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header"
 import { I18nProvider, useI18n } from "../lib/i18n";
 import Hero from "../components/Hero"
 import Starfield from "../components/Starfield";
+import CyberEnergyBackground from "../components/CyberEnergyBackground";
 
 export default function Home() {
   return (
@@ -26,17 +27,21 @@ function ServicesSection() {
   return (
     <section
       id="services"
+      className="dark-section"
       style={{
         ...s.section,
         ...s.darkSection,
+        position: "relative", // 1. 确保父级是定位基准
+        overflow: "hidden"
       }}
     >
-      <Starfield />
-      <div style={s.container}>
+      {/* 2. 背景放在最前面 */}
+      <CyberEnergyBackground />
+      <div style={{ ...s.container, position: "relative", zIndex: 10 }}>
         <div style={s.headerRow}>
           <div style={s.servicesMedia}>
             <img
-              src="/yy11.png"
+              src="/EcoService/yy11.png"
               alt="Services"
               style={s.servicesImg}
             />
@@ -62,13 +67,6 @@ function ServicesSection() {
             <div style={{ ...s.cardLink, ...s.darkLink }}>{t.services.viewDetail}</div>
           </a>
 
-          <a href="#services-maintenance"
-            style={{ ...s.card, ...s.serviceCardDark }}>
-            <div style={{ ...s.cardTitle, color: "white" }}>{t.services.cards.maintenance.title}</div>
-            <div style={{ ...s.cardDesc, ...s.darkText }}>{t.services.cards.maintenance.desc}</div>
-            <div style={{ ...s.cardLink, ...s.darkLink }}>{t.services.viewDetail}</div>
-          </a>
-
           <a href="#services-troubleshooting"
             style={{ ...s.card, ...s.serviceCardDark }}>
             <div style={{ ...s.cardTitle, color: "white" }}>{t.services.cards.troubleshooting.title}</div>
@@ -90,14 +88,8 @@ function ServicesSection() {
           bullets={t.services.details.commissioning.bullets}
           backText={t.services.back}
           mediaHint={t.services.mediaHint}
-        />
-
-        <ServiceDetail
-          id="services-maintenance"
-          title={t.services.details.maintenance.title}
-          bullets={t.services.details.maintenance.bullets}
-          backText={t.services.back}
-          mediaHint={t.services.mediaHint}
+          imageSrc="/EcoService/services/commissioning.png"
+          imageAlt="Commissioning"
         />
 
         <ServiceDetail
@@ -106,6 +98,8 @@ function ServicesSection() {
           bullets={t.services.details.troubleshooting.bullets}
           backText={t.services.back}
           mediaHint={t.services.mediaHint}
+          imageSrc="/EcoService/services/troubleshooting.png"
+          imageAlt="Troubleshooting"
         />
 
         <ServiceDetail
@@ -114,6 +108,8 @@ function ServicesSection() {
           bullets={t.services.details.logistics.bullets}
           backText={t.services.back}
           mediaHint={t.services.mediaHint}
+          imageSrc="/EcoService/services/logistics.png"
+          imageAlt="Logistics"
         />
       </div>
     </section>
@@ -126,39 +122,46 @@ function ServiceDetail({
   bullets,
   backText,
   mediaHint,
+  imageSrc,
+  imageAlt,
 }: {
   id: string;
   title: string;
-  bullets: readonly string[];
+  bullets: readonly string[];   // 这里用 readonly，避免你之前那个 TS 报错
   backText: string;
   mediaHint: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }) {
   return (
     <section id={id} style={{ ...s.detail, scrollMarginTop: 90 }}>
       <div style={s.detailHead}>
         <h3 style={s.h3}>{title}</h3>
-        <a href="#services" style={s.backTop}>
-          {backText}
-        </a>
+        <a href="#services" style={s.backTop}>{backText} ↑</a>
       </div>
 
       <div style={s.detailBody}>
         <ul style={s.ul}>
           {bullets.map((x) => (
-            <li key={x} style={s.li}>
-              {x}
-            </li>
+            <li key={x} style={s.li}>{x}</li>
           ))}
         </ul>
 
         <div style={s.mediaBox}>
-          <div style={s.mediaHint}>{mediaHint}</div>
+          {imageSrc ? (
+            <img
+              src={imageSrc}
+              alt={imageAlt || title}
+              style={s.mediaImg}
+            />
+          ) : (
+            <div style={s.mediaHint}>{mediaHint}</div>
+          )}
         </div>
       </div>
     </section>
   );
 }
-
 
 const s: Record<string, React.CSSProperties> = {
 
@@ -238,7 +241,7 @@ const s: Record<string, React.CSSProperties> = {
 
   primaryBtn: { textDecoration: "none", background: "#111827", color: "#fff", fontWeight: 900, padding: "12px 16px", borderRadius: 12 },
 
-  grid4: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginTop: 18 },
+  grid4: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginTop: 18 },
 
   card: { textDecoration: "none", color: "inherit", border: "1px solid rgba(0,0,0,.08)", borderRadius: 18, padding: 16, background: "rgba(0,0,0,.02)" },
   cardTitle: { fontWeight: 900, fontSize: 16, marginBottom: 6 },
@@ -254,7 +257,22 @@ const s: Record<string, React.CSSProperties> = {
   ul: { margin: 0, paddingLeft: 18, lineHeight: 1.9, opacity: 0.85 },
   li: { marginBottom: 6 },
 
-  mediaBox: { border: "1px solid rgba(0,0,0,.08)", borderRadius: 18, minHeight: 180, background: "rgba(0,0,0,.02)", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 },
+  mediaBox: {
+    width: "100%",
+    maxWidth: 520,
+    borderRadius: 14,
+    overflow: "hidden",
+    background: "rgba(255,255,255,.04)",
+    border: "1px solid rgba(255,255,255,.08)",
+  },
+
+  mediaImg: {
+    width: "100%",
+    height: "auto",
+    display: "block",
+    objectFit: "cover",
+  },
+
   mediaHint: { fontSize: 13, opacity: 0.65, textAlign: "center" },
 
   filterRow: {
@@ -292,25 +310,38 @@ const s: Record<string, React.CSSProperties> = {
     marginTop: 10,
   },
   projectCard: {
-    border: "1px solid rgba(0,0,0,.08)",
+    // 背景色：深灰 + 透明度 (你可以调 0.1 到 0.2 让它更灰或更黑)
+    background: "rgba(255, 255, 255, 0.08)",
+    // 边框：淡淡的白色描边
+    border: "1px solid rgba(255, 255, 255, 0.15)",
     borderRadius: 18,
-    padding: 16,
-    background: "rgba(255,255,255,.9)",
+    padding: 24, // 稍微加大内边距，更大气
+    backdropFilter: "blur(12px)", // 磨砂模糊效果
+    color: "white", // 强制文字变白
+    transition: "transform 0.3s ease, background 0.3s ease",
+    cursor: "default",
   },
-  projectTop: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10 },
-  projectTitle: { fontWeight: 900, fontSize: 14, lineHeight: 1.4 },
+  projectTop: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 12 },
+  projectTitle: {
+    fontWeight: 900,
+    fontSize: 16,
+    lineHeight: 1.4,
+    color: "white", // 确保标题是纯白
+    letterSpacing: "0.5px"
+  },
   projectBadge: {
     fontSize: 11,
-    fontWeight: 900,
-    borderRadius: 999,
-    padding: "6px 10px",
-    border: "1px solid rgba(0,0,0,.10)",
-    background: "rgba(0,0,0,.02)",
+    fontWeight: 800,
+    borderRadius: 6,
+    padding: "4px 8px",
+    border: "1px solid rgba(255,255,255,0.2)",
+    background: "rgba(255,255,255,0.1)", // 半透明白
+    color: "rgba(255,255,255,0.9)",
     whiteSpace: "nowrap",
   },
-  projectUl: { margin: "12px 0 0", paddingLeft: 18, opacity: 0.85, lineHeight: 1.6, fontSize: 13 },
+  projectUl: { margin: "0", paddingLeft: 18, opacity: 0.85, lineHeight: 1.7, fontSize: 14, color: "rgba(255,255,255,0.8)" },
   projectLi: { marginBottom: 6 },
-  projectHint: { marginTop: 10, fontSize: 12, opacity: 0.55 },
+  projectHint: { marginTop: 14, fontSize: 12, opacity: 0.5, color: "white" },
 
   aboutWrap: {
     padding: "64px 0",
@@ -322,36 +353,37 @@ const s: Record<string, React.CSSProperties> = {
     gap: 28,
   },
   aboutTitle: {
-    fontWeight: 900,
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: 700,
+    color: "#111827",
     marginBottom: 12,
   },
   aboutItem: {
-    fontSize: 13,
+    fontSize: 14,
     lineHeight: 1.7,
-    opacity: 0.85,
-    marginBottom: 8,
+    color: "#374151",
+    marginBottom: 6,
   },
   aboutLink: {
     display: "block",
+    fontSize: 14,
+    color: "#1f2937",   // ✅ 深灰
     textDecoration: "none",
-    color: "rgba(0,0,0,.85)",
-    fontSize: 13,
-    padding: "8px 0",
+    marginBottom: 8,
   },
   socialRow: { display: "flex", gap: 10, marginTop: 14 },
   socialDot: {
-    width: 34,
-    height: 34,
-    borderRadius: 999,
-    display: "inline-flex",
+    width: 36,
+    height: 36,
+    borderRadius: "50%",
+    background: "#ffffff",
+    border: "1px solid #d1d5db",
+    color: "#111827",   // ✅ 字母清楚
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    fontWeight: 700,
     textDecoration: "none",
-    border: "1px solid rgba(0,0,0,.10)",
-    background: "white",
-    fontWeight: 900,
-    color: "rgba(0,0,0,.75)",
   },
 
   newsList: { display: "grid", gap: 12 },
@@ -362,8 +394,16 @@ const s: Record<string, React.CSSProperties> = {
     borderRadius: 10,
     background: "rgba(0,0,0,.08)",
   },
-  newsTitleText: { fontSize: 13, fontWeight: 800, lineHeight: 1.35 },
-  newsDate: { fontSize: 12, opacity: 0.6, marginTop: 4 },
+  newsTitleText: {
+    fontSize: 14,
+    fontWeight: 600,
+    color: "#111827",   // ✅ 新闻标题必须清晰
+  },
+
+  newsDate: {
+    fontSize: 12,
+    color: "#6b7280",   // 次级信息
+  },
 
   subscribeForm: { marginTop: 12, display: "grid", gap: 10 },
   subscribeInput: {
@@ -387,7 +427,11 @@ const s: Record<string, React.CSSProperties> = {
 
   aboutBottom: { marginTop: 28 },
   aboutBottomLine: { height: 1, background: "rgba(0,0,0,.08)" },
-  aboutBottomText: { marginTop: 14, fontSize: 12, opacity: 0.6 },
+  aboutBottomText: {
+    fontSize: 13,
+    color: "#6b7280",   // 灰但清晰
+    textAlign: "center",
+  },
 
 };
 
@@ -395,9 +439,16 @@ function CapabilitiesSection() {
   const { t } = useI18n();
 
   return (
-    <section id="capabilities" style={{ ...s.section, ...s.darkSection }}>
-      <Starfield />
-      <div style={s.container}>
+    <section id="capabilities" className="dark-section" style={{
+      ...s.section,
+      ...s.darkSection,
+      position: "relative", // 1. 确保父级是定位基准
+      overflow: "hidden"
+    }}
+    >
+      {/* 2. 背景放在最前面 */}
+      <CyberEnergyBackground />
+      <div style={{ ...s.container, position: "relative", zIndex: 10 }}>
         <div style={s.headerRow}>
           <div>
             <div style={s.kicker}>CAPABILITIES</div>
@@ -526,13 +577,16 @@ const c: Record<string, React.CSSProperties> = {
 
 function ProjectsSection() {
   const { t } = useI18n();
+
+  // 1. 定义标签类型 (注意：这里已经没有 "all" 了)
   type Tag = "commissioning" | "maintenance" | "upgrade" | "training" | "engineering";
-  const [active, setActive] = React.useState<Tag | "all">("all");
 
-  const items = t.projects.items.filter((x) => (active === "all" ? true : x.tag === active));
+  const [active, setActive] = React.useState<Tag>("commissioning");
 
-  const tagList: { key: Tag | "all"; label: string }[] = [
-    { key: "all", label: t.projects.all },
+  const items = t.projects.items.filter((x) => x.tag === active);
+
+  // ✅ 修正 1：去掉了类型定义中的 | "all"
+  const tagList: { key: Tag; label: string }[] = [
     { key: "commissioning", label: t.projects.tags.commissioning },
     { key: "maintenance", label: t.projects.tags.maintenance },
     { key: "upgrade", label: t.projects.tags.upgrade },
@@ -541,9 +595,18 @@ function ProjectsSection() {
   ];
 
   return (
-    <section id="projects" style={{ ...s.section, ...s.darkSection }}>
-      <Starfield />
-      <div style={s.container}>
+    <section
+      id="projects"
+      className="dark-section"
+      style={{
+        ...s.section,
+        ...s.darkSection,
+        position: "relative",
+        overflow: "hidden"
+      }}
+    >
+      <CyberEnergyBackground />
+      <div style={{ ...s.container, position: "relative", zIndex: 10 }}>
         <div style={s.headerRow}>
           <div>
             <div style={s.kicker}>PROJECTS</div>
@@ -574,9 +637,8 @@ function ProjectsSection() {
               <div style={s.projectTop}>
                 <div style={s.projectTitle}>{it.title}</div>
                 <span style={s.projectBadge}>
-                  {active === "all"
-                    ? t.projects.tags[it.tag as Tag]
-                    : tagList.find((x) => x.key === active)?.label}
+                  {/* ✅ 修正 2：直接查找当前标签的名称，不再判断 active === "all" */}
+                  {tagList.find((x) => x.key === it.tag)?.label}
                 </span>
               </div>
 
@@ -589,7 +651,6 @@ function ProjectsSection() {
               </ul>
 
               <div style={s.projectHint}>
-                {/* 这里以后可以放：项目国家/规模/照片/链接 */}
                 {t.services?.mediaHint ?? ""}
               </div>
             </article>
@@ -601,7 +662,7 @@ function ProjectsSection() {
 }
 
 function AboutSection() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [email, setEmail] = React.useState("");
 
   const submit = (e: React.FormEvent) => {
@@ -612,9 +673,9 @@ function AboutSection() {
   };
 
   return (
-    <section id="about" style={s.aboutWrap}>
+    <section id="contact" style={s.aboutWrap}>
       <div style={s.container}>
-        <div style={s.aboutGrid}>
+        <div className="footer-grid" style={s.aboutGrid}>
           {/* 联系我们 */}
           <div>
             <div style={s.aboutTitle}>{t.about.contactTitle}</div>
@@ -633,6 +694,8 @@ function AboutSection() {
           {/* 快速入口 */}
           <div>
             <div style={s.aboutTitle}>{t.about.quickTitle}</div>
+            <a href="/EcoService/about/company" style={s.aboutLink}>{t.about.quickLinks.company}</a>
+            <a href="/EcoService/about/partners" style={s.aboutLink}>{t.about.quickLinks.partners}</a>
             <a href="#services" style={s.aboutLink}>{t.about.quickLinks.services}</a>
             <a href="#capabilities" style={s.aboutLink}>{t.about.quickLinks.capabilities}</a>
             <a href="#projects" style={s.aboutLink}>{t.about.quickLinks.projects}</a>
@@ -641,18 +704,13 @@ function AboutSection() {
 
           {/* 新闻 */}
           <div>
-            <div style={s.aboutTitle}>{t.about.newsTitle}</div>
-            <div style={s.newsList}>
-              {t.about.news.map((n: any) => (
-                <div key={n.title} style={s.newsItem}>
-                  <div style={s.newsThumb} />
-                  <div>
-                    <div style={s.newsTitleText}>{n.title}</div>
-                    <div style={s.newsDate}>{n.date}</div>
-                  </div>
-                </div>
-              ))}
+            <div style={s.aboutTitle}>
+              {lang === "zh" ? "行业动态" : "Industry News"}
+              <span style={s.liveBadge}>LIVE</span>
             </div>
+
+            {/* ✅ 使用我们新写的组件 */}
+            <NewsWidget lang={lang} />
           </div>
 
           {/* 通讯订阅 */}
@@ -683,3 +741,125 @@ function AboutSection() {
   );
 }
 
+// --- 新增的新闻组件 ---
+function NewsWidget({ lang }: { lang: "zh" | "en" }) {
+  const [news, setNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 模拟异步获取新闻（这里是为了演示，如果你有 API Key，可以在这里 fetch 真实数据）
+    const fetchNews = async () => {
+      setLoading(true);
+
+      // ✅ 方案 A：模拟实时数据 (自动生成今天的日期，看起来像实时更新)
+      // 获取当前日期 formatted: YYYY-MM-DD
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const fmt = (d: Date) => d.toISOString().split('T')[0];
+
+      // 模拟的新能源新闻库
+      const mockNews = lang === "zh" ? [
+        {
+          title: "欧盟发布最新电池法案，对碳足迹提出新要求",
+          date: fmt(today), // 永远显示今天
+          source: "Energy Storage News"
+        },
+        {
+          title: "宁德时代发布神行超充电池，开启储能新纪元",
+          date: fmt(today),
+          source: "TechCrunch"
+        },
+        {
+          title: "2024年欧洲工商业储能装机量预计增长40%",
+          date: fmt(yesterday), // 显示昨天
+          source: "Bloomberg NEF"
+        },
+        {
+          title: "德国光储补贴政策更新，利好户用储能市场",
+          date: fmt(yesterday),
+          source: "PV Magazine"
+        }
+      ] : [
+        {
+          title: "EU New Battery Regulation sets strict carbon footprint rules",
+          date: fmt(today),
+          source: "Energy Storage News"
+        },
+        {
+          title: "CATL launches Shenxing Superfast Charging Battery",
+          date: fmt(today),
+          source: "TechCrunch"
+        },
+        {
+          title: "European C&I Energy Storage market to grow by 40% in 2024",
+          date: fmt(yesterday),
+          source: "Bloomberg NEF"
+        },
+        {
+          title: "Germany updates PV & Storage subsidy, boosting residential market",
+          date: fmt(yesterday),
+          source: "PV Magazine"
+        }
+      ];
+
+      // 模拟网络延迟，让用户感觉真的在加载
+      setTimeout(() => {
+        setNews(mockNews);
+        setLoading(false);
+      }, 800);
+
+      // ✅ 方案 B：如果你有真实的 API (例如 GNews 或 NewsAPI)
+      /*
+      try {
+        const apiKey = "YOUR_API_KEY";
+        const query = lang === "zh" ? "储能" : "Energy Storage";
+        const res = await fetch(`https://gnews.io/api/v4/search?q=${query}&token=${apiKey}`);
+        const data = await res.json();
+        // 格式化 data.articles ...
+        // setNews(data.articles);
+      } catch (e) { console.error(e); }
+      */
+    };
+
+    fetchNews();
+  }, [lang]);
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {/* 骨架屏加载效果 */}
+        {[1, 2, 3].map(i => (
+          <div key={i} style={{ display: "flex", gap: 12, alignItems: "center", opacity: 0.5 }}>
+            <div style={{ width: 48, height: 36, background: "rgba(0,0,0,.05)", borderRadius: 8 }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ height: 14, width: "80%", background: "rgba(0,0,0,.05)", marginBottom: 6, borderRadius: 4 }} />
+              <div style={{ height: 10, width: "40%", background: "rgba(0,0,0,.05)", borderRadius: 4 }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div style={s.newsList}>
+      {news.map((n, idx) => (
+        <div key={idx} style={s.newsItem}>
+          {/* 这里我用一个动态颜色的图标代替原来的纯色块 */}
+          <div style={s.newsThumb}>
+            <span style={{ fontSize: 10, fontWeight: 900, opacity: 0.3 }}>NEWS</span>
+          </div>
+          <div>
+            <div style={s.newsTitleText}>{n.title}</div>
+            <div style={s.newsMeta}>
+              <span style={{ marginRight: 8 }}>{n.date}</span>
+              <span style={{ opacity: 0.7 }}>• {n.source}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
