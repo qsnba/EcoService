@@ -70,6 +70,39 @@ function CompanyPageInner() {
 
             {/* 数据条 */}
             <div style={s.statsRow}>
+              {/* 在 statsRow 后面或者 cardSection 结束前添加 */}
+              <div style={{ marginTop: 40, textAlign: 'center' }}>
+                {/* 邮箱链接 */}
+                <div style={{ marginBottom: 12 }}>
+                  <a
+                    href={`mailto:info@eco-service.ltd`}
+                    style={{
+                      color: "#60a5fa",
+                      textDecoration: "none",
+                      fontSize: 16,
+                      fontWeight: 600
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"}
+                    onMouseLeave={(e) => e.currentTarget.style.textDecoration = "none"}
+                  >
+                    📩 {isZh ? "邮件咨询：" : "Email: "} info@eco-service.ltd
+                  </a>
+                </div>
+
+                {/* 电话链接 */}
+                <div>
+                  <a
+                    href="tel:+491787310999"
+                    style={{
+                      color: "rgba(255,255,255,0.8)",
+                      textDecoration: "none",
+                      fontSize: 16
+                    }}
+                  >
+                    📞 {isZh ? "联系电话：" : "Tel: "} +49 178 7310999
+                  </a>
+                </div>
+              </div>
               <div style={s.statItem}>
                 <div style={s.statNum}>500+</div>
                 <div style={s.statLabel}>{isZh ? "完成项目" : "Projects Done"}</div>
@@ -85,13 +118,7 @@ function CompanyPageInner() {
             </div>
 
             {/* 团队照片区 */}
-            <div style={s.imageBox}>
-              {/* ✅ 修改 2：如果你有图片，确保路径是 "/team.jpg" 而不是 "/EcoService/team.jpg" */}
-              {/* <img src="/team.jpg" style={s.realImg} alt="Team" /> */}
-              <div style={s.imageHint}>
-                {isZh ? "此处展示团队合影或公司大楼照片" : "Team Photo / Office Building Image Here"}
-              </div>
-            </div>
+
           </section>
 
           {/* 底部返回链接 */}

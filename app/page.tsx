@@ -787,7 +787,24 @@ function AboutSection() {
             <div style={s.aboutTitle}>{t.about.contactTitle}</div>
             <div style={s.aboutItem}>{t.about.contact.phone1}</div>
             <div style={s.aboutItem}>{t.about.contact.phone2}</div>
-            <div style={s.aboutItem}>{t.about.contact.email}</div>
+            <div style={s.aboutItem}>
+              <a
+                href={`mailto:info@eco-service.ltd`}
+                style={{
+                  // ✅ 将颜色改为蓝色高亮
+                  color: "#60a5fa",
+                  // ✅ 如果希望像传统链接一样有下划线，可以改为 "underline"
+                  textDecoration: "none",
+                  cursor: "pointer",
+                  fontWeight: "600" // 加粗一点会更显眼
+                }}
+                // ✅ 增加一个悬停效果：鼠标移上去时变亮
+                onMouseEnter={(e) => e.currentTarget.style.color = "#93c5fd"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "#60a5fa"}
+              >
+                {t.about.contact.email}
+              </a>
+            </div>
             <div style={s.aboutItem}>{t.about.contact.address}</div>
 
             <div style={s.socialRow}>
