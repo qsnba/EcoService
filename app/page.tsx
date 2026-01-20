@@ -165,7 +165,47 @@ function ServiceDetail({
 
 const s: Record<string, React.CSSProperties> = {
 
+  // 项目卡片外壳
+  projectCardContainer: {
+    background: "rgba(255, 255, 255, 0.05)",
+    border: "1px solid rgba(255, 255, 255, 0.12)",
+    borderRadius: 20,
+    overflow: "hidden", // 关键：隐藏溢出的展开内容
+    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+    cursor: "pointer",
+  },
 
+  // 默认隐藏的扩展区域
+  expandArea: {
+    maxHeight: 0, // 初始高度为0
+    opacity: 0,   // 初始透明度为0
+    overflow: "hidden",
+    transition: "max-height 0.5s ease, opacity 0.4s ease",
+    background: "rgba(255, 255, 255, 0.03)",
+    borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+  },
+
+  // 展开后的状态（通过 JS 动态控制）
+  expandAreaOpen: {
+    maxHeight: 450, // 足够容纳内容的高度
+    opacity: 1,
+  },
+
+  // 内部图片格
+  imgGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 12,
+    padding: "16px 24px 24px 24px",
+  },
+
+  previewImg: {
+    width: "100%",
+    aspectRatio: "16/9",
+    borderRadius: 12,
+    objectFit: "cover",
+    border: "1px solid rgba(255,255,255,0.1)",
+  },
 
   darkSection: {
     position: "relative",
@@ -580,14 +620,23 @@ const c: Record<string, React.CSSProperties> = {
 function ProjectsSection() {
   const { t } = useI18n();
 
-  // 1. 定义标签类型 (注意：这里已经没有 "all" 了)
-  type Tag = "commissioning" | "maintenance" | "upgrade" | "training" | "engineering";
+  // ✅ 新增：定义项目项的类型，包含图片属性
+  interface ProjectItem {
+    title: string;
+    tag: string;
+    bullets: string[];
+    image1?: string; // ? 代表可选
+    image2?: string;
+  }
 
+  type Tag = "commissioning" | "maintenance" | "upgrade" | "training" | "engineering";
   const [active, setActive] = React.useState<Tag>("commissioning");
 
-  const items = t.projects.items.filter((x) => x.tag === active);
+  // ✅ 关键逻辑：记录当前鼠标悬停的卡片索引
+  const [hoveredIdx, setHoveredIdx] = React.useState<number | null>(null);
 
-  // ✅ 修正 1：去掉了类型定义中的 | "all"
+  const items = (t.projects.items as unknown as ProjectItem[]).filter((x) => x.tag === active);
+
   const tagList: { key: Tag; label: string }[] = [
     { key: "commissioning", label: t.projects.tags.commissioning },
     { key: "maintenance", label: t.projects.tags.maintenance },
@@ -634,26 +683,81 @@ function ProjectsSection() {
         </div>
 
         <div style={s.projectsGrid}>
-          {items.map((it) => (
-            <article key={it.title} style={s.projectCard}>
-              <div style={s.projectTop}>
-                <div style={s.projectTitle}>{it.title}</div>
-                <span style={s.projectBadge}>
-                  {/* ✅ 修正 2：直接查找当前标签的名称，不再判断 active === "all" */}
-                  {tagList.find((x) => x.key === it.tag)?.label}
-                </span>
+          {/* 找到这一行开始替换 */}
+          {items.map((it, idx) => (
+            <article
+              key={it.title}
+              style={{
+                ...s.projectCardContainer,
+                // 这里的颜色和动画逻辑保持不变
+                borderColor: hoveredIdx === idx ? "rgba(34, 197, 94, 0.5)" : "rgba(255, 255, 255, 0.12)",
+                boxShadow: hoveredIdx === idx ? "0 20px 40px rgba(0,0,0,0.4)" : "none",
+                transform: hoveredIdx === idx ? "translateY(-4px)" : "none"
+              }}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
+              {/* 1. 卡片上半部分：文字内容 */}
+              <div style={{ padding: 24 }}>
+                <div style={s.projectTop}>
+                  <div style={{
+                    ...s.projectTitle,
+                    color: hoveredIdx === idx ? "#4ade80" : "white",
+                    transition: "color 0.3s"
+                  }}>
+                    {it.title}
+                  </div>
+                  <span style={s.projectBadge}>
+                    {tagList.find((x) => x.key === it.tag)?.label}
+                  </span>
+                </div>
+
+                <ul style={s.projectUl}>
+                  {it.bullets.map((b: string) => (
+                    <li key={b} style={s.projectLi}>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              <ul style={s.projectUl}>
-                {it.bullets.map((b: string) => (
-                  <li key={b} style={s.projectLi}>
-                    {b}
-                  </li>
-                ))}
-              </ul>
+              {/* 2. 核心修改：展开区域 */}
+              <div style={{
+                ...s.expandArea,
+                maxHeight: hoveredIdx === idx ? 400 : 0,
+                opacity: hoveredIdx === idx ? 1 : 0
+              }}>
+                <div style={{ padding: "0 24px 12px 24px" }}>
+                  {/* 如果没有图片路径，就不显示这个“现场预览”的标题 */}
+                  {(it.image1 || it.image2) && (
+                    <div style={{ fontSize: 11, color: "#4ade80", fontWeight: 800, marginBottom: 12, letterSpacing: '1px' }}>
+                      SITE PREVIEW / 现场预览
+                    </div>
+                  )}
 
-              <div style={s.projectHint}>
-                {t.services?.mediaHint ?? ""}
+                  <div style={s.imgGrid}>
+                    {/* ✅ 只有当数据里填了 image1 时才渲染图片 */}
+                    {it.image1 && (
+                      <img
+                        src={it.image1}
+                        alt={`${it.title} - 1`}
+                        style={s.previewImg}
+                      />
+                    )}
+                    {/* ✅ 只有当数据里填了 image2 时才渲染图片 */}
+                    {it.image2 && (
+                      <img
+                        src={it.image2}
+                        alt={`${it.title} - 2`}
+                        style={s.previewImg}
+                      />
+                    )}
+                  </div>
+
+                  <p style={{ marginTop: 12, fontSize: 13, color: "rgba(255,255,255,0.5)", fontStyle: "italic" }}>
+                    {t.services?.mediaHint ?? "Project completed successfully."}
+                  </p>
+                </div>
               </div>
             </article>
           ))}
