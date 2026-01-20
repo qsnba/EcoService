@@ -5,7 +5,7 @@ import { useI18n } from "../lib/i18n";
 import { usePathname } from "next/navigation";
 
 // ✅ 1. 核心配置
-const REPO_PATH = "/EcoService";
+const REPO_PATH = "";
 
 type MenuLink = { label: string; href: string; desc?: string };
 type MenuItem =

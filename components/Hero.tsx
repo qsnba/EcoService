@@ -10,7 +10,7 @@ export default function Hero() {
   return (
     <section id="top" style={s.wrap}>
       <video style={s.video} autoPlay muted loop playsInline preload="metadata">
-        <source src="/EcoService/video1.mp4" type="video/mp4" />
+        <source src="/video1.mp4" type="video/mp4" />
       </video>
 
       <div style={s.overlay} />
