@@ -41,7 +41,7 @@ function ServicesSection() {
         <div style={s.headerRow}>
           <div style={s.servicesMedia}>
             <img
-              src="/EcoService/yy11.png"
+              src="/yy11.png"
               alt="Services"
               style={s.servicesImg}
             />
@@ -88,7 +88,7 @@ function ServicesSection() {
           bullets={t.services.details.commissioning.bullets}
           backText={t.services.back}
           mediaHint={t.services.mediaHint}
-          imageSrc="/EcoService/services/commissioning.png"
+          imageSrc="/services/commissioning.png"
           imageAlt="Commissioning"
         />
 
@@ -98,7 +98,7 @@ function ServicesSection() {
           bullets={t.services.details.troubleshooting.bullets}
           backText={t.services.back}
           mediaHint={t.services.mediaHint}
-          imageSrc="/EcoService/services/troubleshooting.png"
+          imageSrc="/services/troubleshooting.png"
           imageAlt="Troubleshooting"
         />
 
@@ -108,7 +108,7 @@ function ServicesSection() {
           bullets={t.services.details.logistics.bullets}
           backText={t.services.back}
           mediaHint={t.services.mediaHint}
-          imageSrc="/EcoService/services/logistics.png"
+          imageSrc="/services/logistics.png"
           imageAlt="Logistics"
         />
       </div>
@@ -164,6 +164,8 @@ function ServiceDetail({
 }
 
 const s: Record<string, React.CSSProperties> = {
+
+
 
   darkSection: {
     position: "relative",
@@ -694,8 +696,8 @@ function AboutSection() {
           {/* 快速入口 */}
           <div>
             <div style={s.aboutTitle}>{t.about.quickTitle}</div>
-            <a href="/EcoService/about/company" style={s.aboutLink}>{t.about.quickLinks.company}</a>
-            <a href="/EcoService/about/partners" style={s.aboutLink}>{t.about.quickLinks.partners}</a>
+            <a href="/about/company" style={s.aboutLink}>{t.about.quickLinks.company}</a>
+            <a href="/about/partners" style={s.aboutLink}>{t.about.quickLinks.partners}</a>
             <a href="#services" style={s.aboutLink}>{t.about.quickLinks.services}</a>
             <a href="#capabilities" style={s.aboutLink}>{t.about.quickLinks.capabilities}</a>
             <a href="#projects" style={s.aboutLink}>{t.about.quickLinks.projects}</a>
