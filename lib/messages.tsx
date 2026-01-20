@@ -107,7 +107,6 @@ export const messages = {
           tag: "upgrade",
           bullets: ["电池高压电缆线路更换作业", "电池更换安装"],
           image1: "/EBUS1.png",
-          image2: "",
         },
         {
           title: "空调 PTC 液热系统管道更换",
