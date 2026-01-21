@@ -807,11 +807,11 @@ function AboutSection() {
             </div>
             <div style={s.aboutItem}>{t.about.contact.address}</div>
 
-            <div style={s.socialRow}>
+            {/* <div style={s.socialRow}>
               <a style={s.socialDot} href="#" aria-label="LinkedIn">in</a>
               <a style={s.socialDot} href="#" aria-label="YouTube">▶</a>
               <a style={s.socialDot} href="#" aria-label="X">x</a>
-            </div>
+            </div> */}
           </div>
 
           {/* 快速入口 */}
