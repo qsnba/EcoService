@@ -178,7 +178,6 @@ export const messages = {
           tag: "commissioning",
           bullets: ["调试投运", "现场测试与验收支持"],
           image1: "/10KW3.png",
-
         },
         {
           title: "储能电柜焊接修补",
@@ -262,7 +261,7 @@ export const messages = {
       cta: "Contact Us",
       viewDetail: "View details →",
       back: "Back to Services ↑",
-      mediaHint: "(Images / videos / site photos can be placed here)",
+      mediaHint: "",
 
       cards: {
         commissioning: {
@@ -359,11 +358,13 @@ export const messages = {
           title: "E-bus Battery Power System Upgrade Service",
           tag: "upgrade",
           bullets: ["High-voltage cable circuit replacement", "Battery replacement and installation"],
+          image1: "/EBUS1.png",
         },
         {
           title: "Air Conditioning PTC Liquid Heat System Pipe Replacement",
           tag: "maintenance",
           bullets: ["PTC liquid heat pipe replacement", "On-site disassembly and verification"],
+          image2: "/EBUS2.png",
         },
         {
           title: "ESS Maintenance Training (Hands-on simulation with customer)",
@@ -384,47 +385,64 @@ export const messages = {
           title: "90MW Comprehensive BMU Software Upgrade & CSC Replacement",
           tag: "upgrade",
           bullets: ["BMU software upgrade", "CSC replacement and verification"],
+          image1: "/90MW1.png",
+          image2: "/90MW2.png",
         },
         {
           title: "Liquid-cooled Injection & Electrical Cabinet Balancing",
           tag: "engineering",
           bullets: ["Liquid-cooled injection", "Electrical cabinet balancing"],
+          image1: "/yeleng1.png",
+          image2: "/yeleng2.png",
         },
         {
           title: "On-site Installation & Commissioning of 10kW Home ESS",
           tag: "commissioning",
           bullets: ["On-site installation", "Commissioning and go-live validation"],
+          image1: "/10KW1.png",
+          image2: "/10KW2.png",
         },
         {
           title: "Commissioning of 100MW Energy Storage Project",
           tag: "commissioning",
           bullets: ["System integration", "Validation and delivery records"],
+          image1: "/100MW1.png",
+          image2: "/100MW2.png",
         },
         {
           title: "Commissioning of 55MW Energy Storage Project",
           tag: "commissioning",
           bullets: ["On-site commissioning", "Operation validation & delivery support"],
+          image1: "/55MW1.png",
+          image2: "/55MW2.png",
         },
         {
           title: "55MW Energy Storage Project Maintenance",
           tag: "maintenance",
           bullets: ["Fault localization and recovery", "Maintenance logs & report output"],
+          image1: "/55MW3.png",
+          image2: "/55MW4.png",
         },
         {
           title: "Commissioning of 10MW Energy Storage Project",
           tag: "commissioning",
           bullets: ["Commissioning and go-live", "On-site testing and acceptance support"],
+          image1: "/10KW3.png",
         },
         {
           title: "Welding Repair of Energy Storage Cabinet",
           tag: "engineering",
           bullets: ["Welding repair", "Structural inspection and recovery"],
+          image1: "/chuneng1.png",
+          image2: "/chuneng2.png",
         },
         {
           title:
             "Factory Installation / Pipeline Welding / Hoisting / Steel Platform Construction / PV Panel Installation",
           tag: "engineering",
           bullets: ["Equipment installation", "Welding & hoisting", "Steel platform / PV installation"],
+          image1: "/changfang1.png",
+          image2: "/changfang2.png",
         },
       ],
     },
